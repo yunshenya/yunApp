@@ -59,4 +59,13 @@ class UIViewModel: ViewModel() {
     fun add(){
         counter.intValue++
     }
+
+    suspend fun refresh(){
+        val newImages = (1..10).map {
+            Api.imageService.getAnimeList()
+        }
+        _uiState.update {
+            it.copy(imageList = newImages)
+        }
+    }
 }
