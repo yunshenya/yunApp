@@ -27,6 +27,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
@@ -57,6 +58,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
+import coil.compose.SubcomposeAsyncImage
 import com.yunshen.yunapp.R
 import com.yunshen.yunapp.navigation.NavTopBar
 import com.yunshen.yunapp.viewmodel.UIState
@@ -193,9 +195,16 @@ fun IntroductoryCard(
             shape = RoundedCornerShape(16.dp),
             elevation = CardDefaults.cardElevation(defaultElevation = 10.dp) // 设置阴影
         ) {
-            AsyncImage(
+            SubcomposeAsyncImage(
                 model = state.imageList[it].imgurl,
-                error = painterResource(id = R.drawable.hhead),
+                error = {
+                    painterResource(id = R.drawable.hhead)
+                },
+                loading = {
+                    Box(modifier = Modifier.fillMaxSize().padding(10.dp), contentAlignment = Alignment.Center){
+                        CircularProgressIndicator()
+                    }
+                },
                 contentDescription = "Anime girl on couch",
                 modifier = Modifier
                     .fillMaxWidth()

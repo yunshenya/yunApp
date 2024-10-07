@@ -3,6 +3,7 @@ package com.yunshen.yunapp.navigation
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.Build
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavHostController
@@ -18,7 +19,8 @@ data class Destination(
 enum class Destinations{
     INDEX,
     TOOLS,
-    LOGIN
+    LOGIN,
+    SETTING
 }
 
 
@@ -37,10 +39,10 @@ val BOTTOM_NAVIGATION_ITEMS: List<Destination> = listOf(
     ),
 
     Destination(
-        icon = Icons.Filled.AddCircle,
-        id = Destinations.LOGIN.name,
+        icon = Icons.Filled.Settings,
+        id = Destinations.SETTING.name,
         selectedIcon = Icons.Filled.Home,
-        text = "登录")
+        text = "设置")
 )
 
 

@@ -8,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.yunshen.yunapp.pages.IndexScreen
 import com.yunshen.yunapp.pages.LoginScreen
+import com.yunshen.yunapp.pages.SettingScreen
 import com.yunshen.yunapp.pages.ToolsScreen
 import com.yunshen.yunapp.viewmodel.UIViewModel
 
@@ -28,6 +29,10 @@ fun Navigation(navHostController: NavHostController, modifier: Modifier = Modifi
 
         composable(route= Destinations.TOOLS.name){
             ToolsScreen(modifier = modifier, viewModel = viewmodel)
+        }
+
+        composable(route = Destinations.SETTING.name){
+            SettingScreen(modifier = modifier, viewModel = viewmodel)
         }
     }
 }
