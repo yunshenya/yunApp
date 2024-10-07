@@ -1,5 +1,8 @@
 package com.yunshen.yunapp.pages
 
+import android.content.Intent
+import android.content.res.Configuration
+import android.net.Uri
 import android.widget.Toast
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -17,6 +20,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -44,6 +48,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -54,6 +59,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.yunshen.yunapp.R
 import com.yunshen.yunapp.navigation.NavTopBar
+import com.yunshen.yunapp.viewmodel.UIState
 import com.yunshen.yunapp.viewmodel.UIViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -65,6 +71,9 @@ fun IndexScreen(modifier: Modifier = Modifier, viewModel: UIViewModel = viewMode
     var isRefreshing by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
     val refreshState = rememberPullToRefreshState()
+    val configuration = LocalConfiguration.current
+
+
     PullToRefreshBox(
         modifier = modifier.fillMaxSize(),
         isRefreshing = isRefreshing,
@@ -150,54 +159,15 @@ fun IndexScreen(modifier: Modifier = Modifier, viewModel: UIViewModel = viewMode
                 }
             }
 
-            items(state.imageList.size) {
-                Box(
-                    modifier = Modifier.fillMaxWidth(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Card(
-                        modifier = Modifier
-                            .width(400.dp)
-                            .padding(16.dp),
-                        shape = RoundedCornerShape(16.dp),
-                        elevation = CardDefaults.cardElevation(defaultElevation = 10.dp) // 设置阴影
-                    ) {
-                        AsyncImage(
-                            model = state.imageList[it].imgurl,
-                            error = painterResource(id = R.drawable.hhead),
-                            contentDescription = "Anime girl on couch",
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)),
-                            contentScale = ContentScale.Crop
-                        )
-                        // 关键：去除固定高度，让 Column 根据内容自适应
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .background(Color.White)
-                                .padding(16.dp)
-                        ) {
-                            Text(
-                                text = "探索无尽的乐趣",
-                                fontSize = 20.sp,
-                                fontWeight = FontWeight.Bold
-                            )
-                            Spacer(modifier = Modifier.height(8.dp))
-                            Text(
-                                text = "这里是游戏、动漫爱好者的天堂，也是创意与灵感碰撞的乐园。无论你是热衷于最新游戏资讯的玩家，还是寻找美周边的收藏家，亦或是对动漫世界充满无限遐想的粉丝，这里都能满足你的需求。",
-                                fontSize = 14.sp
-                            )
-                            Spacer(modifier = Modifier.height(16.dp))
-                            val context = LocalContext.current
-                            Button(
-                                onClick = {
-                                    Toast.makeText(context, "还在开发中", Toast.LENGTH_SHORT).show()
-                                },
-                                modifier = Modifier.align(Alignment.End)
-                            ) {
-                                Text("进入")
-                            }
+            if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT){
+                items(state.imageList.size){
+                    IntroductoryCard(it, viewModel, state)
+                }
+            } else {
+                item{
+                    LazyRow (modifier = Modifier.fillMaxWidth()){
+                        items(state.imageList.size){
+                            IntroductoryCard(it, viewModel, state)
                         }
                     }
                 }
@@ -206,6 +176,75 @@ fun IndexScreen(modifier: Modifier = Modifier, viewModel: UIViewModel = viewMode
     }
 }
 
+@Composable
+fun IntroductoryCard(
+    it: Int,
+    viewModel: UIViewModel,
+    state: UIState
+) {
+    Box(
+        modifier = Modifier.fillMaxWidth(),
+        contentAlignment = Alignment.Center
+    ) {
+        Card(
+            modifier = Modifier
+                .width(400.dp)
+                .padding(16.dp),
+            shape = RoundedCornerShape(16.dp),
+            elevation = CardDefaults.cardElevation(defaultElevation = 10.dp) // 设置阴影
+        ) {
+            AsyncImage(
+                model = state.imageList[it].imgurl,
+                error = painterResource(id = R.drawable.hhead),
+                contentDescription = "Anime girl on couch",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)),
+                contentScale = ContentScale.Crop
+            )
+            // 关键：去除固定高度，让 Column 根据内容自适应
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color.White)
+                    .padding(16.dp)
+            ) {
+                Text(
+                    text = viewModel.dataList[it].title,
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = viewModel.dataList[it].content,
+                    fontSize = 14.sp
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                val context = LocalContext.current
+                Button(
+                    onClick = {
+                        when(it){
+                            5 -> {
+                                try {
+                                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse("mqqopensdkapi://bizAgent/qm/qr?url=http%3A%2F%2Fqm.qq.com%2Fcgi-bin%2Fqm%2Fqr%3Ffrom%3Dapp%26p%3Dandroid%26jump_from%3Dwebapi%26k%3DOt5eg4CDBUGtwHyGNg-faf2ryPo9Gfpw"))
+                                    context.startActivity(intent)
+                                } catch (_: Exception) {
+                                    Toast.makeText(context, "未安装qq", Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                            else -> {
+                                Toast.makeText(context, "开发中...", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                    },
+                    modifier = Modifier.align(Alignment.End)
+                ) {
+                    Text("进入")
+                }
+            }
+        }
+    }
+}
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable

@@ -6,3 +6,8 @@ data class UIState(
     val imageList: List<ImageData> = emptyList(),
     val image: String = "",
 )
+
+data class DetailState(
+    val title: String,
+    val content: String
+)
