@@ -242,7 +242,7 @@ fun IntroductoryCard(
                                     val intent = Intent(Intent.ACTION_VIEW, Uri.parse("mqqopensdkapi://bizAgent/qm/qr?url=http%3A%2F%2Fqm.qq.com%2Fcgi-bin%2Fqm%2Fqr%3Ffrom%3Dapp%26p%3Dandroid%26jump_from%3Dwebapi%26k%3DOt5eg4CDBUGtwHyGNg-faf2ryPo9Gfpw"))
                                     context.startActivity(intent)
                                 } catch (_: Exception) {
-                                    Toast.makeText(context, "未安装qq", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(context, "请先安装qq", Toast.LENGTH_SHORT).show()
                                 }
                             }
                             else -> {
