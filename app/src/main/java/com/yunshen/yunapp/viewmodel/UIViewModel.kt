@@ -2,7 +2,6 @@ package com.yunshen.yunapp.viewmodel
 
 import android.util.Log
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yunshen.yunapp.network.Api
@@ -18,9 +17,6 @@ class UIViewModel: ViewModel() {
     val uiState: StateFlow<UIState> = _uiState.asStateFlow()
     private val counter = mutableIntStateOf(0)
     val count = counter
-
-    private var _isChecked = mutableStateOf(false) //因为传递参数使用不能使用by关键字，所以使用mutableStateOf
-    val isChecked = _isChecked
 
     val dataList = listOf(
         DetailState("探索无限乐趣", "这里是游戏、动漫爱好者的天堂，也是创意与灵感碰撞的乐园。无论你是热衷于最新游戏资讯的玩家，还是寻找精美周边的收藏家，亦或是对动漫世界充满无限遐想的粉丝，这里都能满足你的需求。"),
@@ -87,9 +83,5 @@ class UIViewModel: ViewModel() {
         _uiState.update {
             it.copy(imageList = newImages)
         }
-    }
-
-    fun updateChecked(checked: Boolean){
-        _isChecked.value = checked
     }
 }

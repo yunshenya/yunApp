@@ -23,7 +23,7 @@ fun NavTopBar(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
         modifier = modifier
             .background(translucentWhite)
             .fillMaxWidth()
-            .height(60.dp),
+            .height(40.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {

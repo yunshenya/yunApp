@@ -20,7 +20,6 @@ import com.yunshen.yunapp.viewmodel.UIViewModel
 
 @Composable
 fun ToolsScreen(modifier: Modifier = Modifier, viewModel: UIViewModel = viewModel()) {
-
     Box(modifier = modifier.fillMaxSize()) {
         Scaffold(
             floatingActionButton = {
@@ -38,7 +37,6 @@ fun ToolsScreen(modifier: Modifier = Modifier, viewModel: UIViewModel = viewMode
                     text = "${viewModel.count.intValue}",
                     modifier = Modifier.padding(innerPadding)
                 )
-                Text(text = "${viewModel.isChecked.value}")
             }
         }
     }

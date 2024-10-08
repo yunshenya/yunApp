@@ -61,6 +61,8 @@ dependencies {
     // Retrofit with Scalar Converter
     implementation(libs.converter.scalars)
     implementation(libs.converter.gson)
+    //增加Datastore依赖
+    implementation(libs.androidx.datastore.preferences)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)
