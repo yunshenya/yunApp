@@ -18,13 +18,6 @@ class UIViewModel: ViewModel() {
     private val counter = mutableIntStateOf(0)
     val count = counter
 
-
-    val images = listOf(
-        "https://img.btstu.cn/api/images/5b0fafb929d12.jpg",
-        "https://img.btstu.cn/api/images/5dfc964e4c6d7.jpg",
-        "https://img.btstu.cn/api/images/5e782a1c0469d.jpg"
-    )
-
     val dataList = listOf(
         DetailState("探索无限乐趣", "这里是游戏、动漫爱好者的天堂，也是创意与灵感碰撞的乐园。无论你是热衷于最新游戏资讯的玩家，还是寻找精美周边的收藏家，亦或是对动漫世界充满无限遐想的粉丝，这里都能满足你的需求。"),
         DetailState("分享与交流", "我们的论坛是连接志同道合朋友的桥梁。在这里，你可以发布自己的心得体验，参与各种话题讨论，与来自世界各地的同好们共同成长。无论是攻略心得还是作品分析，每一次交流都将让你收获满满。"),
@@ -35,6 +28,7 @@ class UIViewModel: ViewModel() {
     )
 
     init {
+        getCarouselList()
         getAnimeList()
         getImageList()
     }
@@ -43,13 +37,27 @@ class UIViewModel: ViewModel() {
         viewModelScope.launch{
             try {
                 val result = Api.imageService.getAnimeList()
-                Log.d("getAnimeList", "getAnimeList: ${result.imgurl}")
                 _uiState.update {
                     it.copy(image = result.imgurl)
                 }
         } catch (e: Exception){
             Log.d("getAnimeList", "getAnimeList: ${e.message}")
         }
+        }
+    }
+
+   fun getCarouselList(){
+        viewModelScope.launch{
+            try {
+                val newImages = (1..7).map {
+                    Api.imageService.getAnimeList()
+                }
+                _uiState.update {
+                    it.copy(carousel = newImages.map { it.imgurl })
+                }
+        }catch (e: Exception){
+            Log.d("getAnimeList", "getAnimeList: ${e.message}")
+            }
         }
     }
 

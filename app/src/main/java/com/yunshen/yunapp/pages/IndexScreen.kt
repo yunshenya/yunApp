@@ -30,6 +30,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.RadioButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
@@ -75,107 +76,110 @@ fun IndexScreen(modifier: Modifier = Modifier, viewModel: UIViewModel = viewMode
     val refreshState = rememberPullToRefreshState()
     val configuration = LocalConfiguration.current
 
-
-    PullToRefreshBox(
-        modifier = modifier.fillMaxSize(),
-        isRefreshing = isRefreshing,
-        state = refreshState,
-        onRefresh = {
-            scope.launch {
-                isRefreshing = true
-                viewModel.refresh()
-                isRefreshing = false
-            }
-        }) {
-        AsyncImage(
-            model = state.image,
-            error = painterResource(id = R.drawable.hhead),
-            contentDescription = "背景图",
-            modifier = Modifier
-                .fillMaxSize()
-                .blur(10.dp)
-                .alpha(10f),
-            contentScale = ContentScale.Crop
-        )
-        LazyColumn(
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            item {
-                NavTopBar {
-                    Text(
-                        text = "梦想之门", color = Color(0xFF6A0DAD),
-                        fontWeight = FontWeight.Black, fontSize = 24.sp
-                    )
+    Scaffold (topBar = {
+        NavTopBar {
+            Text(
+                text = "梦想之门", color = Color(0xFF6A0DAD),
+                fontWeight = FontWeight.Black, fontSize = 24.sp
+            )
+        }
+    }){
+        innerPadding ->
+        PullToRefreshBox(
+            modifier = modifier.fillMaxSize().padding(innerPadding),
+            isRefreshing = isRefreshing,
+            state = refreshState,
+            onRefresh = {
+                scope.launch {
+                    isRefreshing = true
+                    viewModel.refresh()
+                    isRefreshing = false
                 }
-            }
-            item {
-                Column(modifier = Modifier.fillMaxSize()) {
-                    val images = viewModel.images
-                    val pagerState = rememberPagerState(pageCount = { images.size })
-                    val coroutineScope = rememberCoroutineScope()
-                    LaunchedEffect(pagerState.settledPage) {
-                        delay(1000)
-                        val nextPage = (pagerState.settledPage + 1) % images.size
-                        pagerState.animateScrollToPage(nextPage)
-                    }
-                    HorizontalPager(
-                        state = pagerState,
-                        contentPadding = PaddingValues(10.dp)
-                    ) { index ->
-                        val imgScale by animateFloatAsState(
-                            targetValue = if (pagerState.currentPage == index) 1f else 0.8f,
-                            label = "缩放动画", animationSpec = tween(300)
-                        )
-                        AsyncImage(
-                            model = images[index],
-                            error = painterResource(id = R.drawable.hhead),
-                            contentDescription = null,
+            }) {
+            AsyncImage(
+                model = state.image,
+                error = painterResource(id = R.drawable.hhead),
+                contentDescription = "背景图",
+                modifier = Modifier
+                    .fillMaxSize()
+                    .blur(10.dp)
+                    .alpha(10f),
+                contentScale = ContentScale.Crop
+            )
+            LazyColumn(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                item {
+                    Column(modifier = Modifier.fillMaxSize()) {
+                        val images = state.carousel
+                        val pagerState = rememberPagerState(pageCount = { images.size })
+                        val coroutineScope = rememberCoroutineScope()
+                        LaunchedEffect(pagerState.settledPage) {
+                            delay(1000)
+                            val nextPage = (pagerState.settledPage + 1) % images.size
+                            pagerState.animateScrollToPage(nextPage)
+                        }
+                        HorizontalPager(
+                            state = pagerState,
+                            contentPadding = PaddingValues(10.dp)
+                        ) { index ->
+                            val imgScale by animateFloatAsState(
+                                targetValue = if (pagerState.currentPage == index) 1f else 0.8f,
+                                label = "缩放动画", animationSpec = tween(300)
+                            )
+                            AsyncImage(
+                                model = images[index],
+                                error = painterResource(id = R.drawable.hhead),
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .padding(5.dp)
+                                    .fillMaxWidth()
+                                    .clip(
+                                        RoundedCornerShape(10.dp)
+                                    )
+                                    .scale(imgScale),
+                                contentScale = ContentScale.FillWidth
+                            )
+                        }
+                        Row(
                             modifier = Modifier
-                                .padding(5.dp)
                                 .fillMaxWidth()
-                                .clip(
-                                    RoundedCornerShape(10.dp)
-                                )
-                                .scale(imgScale),
-                            contentScale = ContentScale.FillWidth
-                        )
-                    }
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .size(20.dp)
-                            .align(Alignment.CenterHorizontally),
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        images.indices.forEach { radioIndex ->
-                            RadioButton(
-                                modifier = Modifier.scale(0.5f),
-                                selected = radioIndex == pagerState.currentPage,
-                                onClick = {
-                                    coroutineScope.launch {
-                                        pagerState.animateScrollToPage(radioIndex)
-                                    }
-                                })
+                                .size(20.dp)
+                                .align(Alignment.CenterHorizontally),
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+                            images.indices.forEach { radioIndex ->
+                                RadioButton(
+                                    modifier = Modifier.scale(0.5f),
+                                    selected = radioIndex == pagerState.currentPage,
+                                    onClick = {
+                                        coroutineScope.launch {
+                                            pagerState.animateScrollToPage(radioIndex)
+                                        }
+                                    })
+                            }
                         }
                     }
                 }
-            }
 
-            if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT){
-                items(state.imageList.size){
-                    IntroductoryCard(it, viewModel, state)
-                }
-            } else {
-                item{
-                    LazyRow (modifier = Modifier.fillMaxWidth()){
-                        items(state.imageList.size){
-                            IntroductoryCard(it, viewModel, state)
+                if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT){
+                    items(state.imageList.size){
+                        IntroductoryCard(it, viewModel, state)
+                    }
+                } else {
+                    item{
+                        LazyRow (modifier = Modifier.fillMaxWidth()){
+                            items(state.imageList.size){
+                                IntroductoryCard(it, viewModel, state)
+                            }
                         }
                     }
                 }
             }
         }
     }
+
+
 }
 
 @Composable
