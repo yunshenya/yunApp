@@ -11,10 +11,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -24,7 +20,6 @@ import com.yunshen.yunapp.viewmodel.UIViewModel
 
 @Composable
 fun SettingScreen(modifier: Modifier = Modifier, viewModel: UIViewModel = viewModel()) {
-    var isChecked by remember { mutableStateOf(false) }
     Box(modifier = modifier.fillMaxSize()) {
         Scaffold (
             topBar = {
@@ -38,9 +33,9 @@ fun SettingScreen(modifier: Modifier = Modifier, viewModel: UIViewModel = viewMo
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Row (modifier = Modifier.fillMaxWidth().padding(innerPadding), horizontalArrangement = Arrangement.SpaceAround, verticalAlignment = Alignment.CenterVertically){
-                    Text(text = "性别")
-                    Switch(checked = isChecked, onCheckedChange = {
-                        isChecked = it
+                    Text(text = "设置")
+                    Switch(checked = viewModel.isChecked.value, onCheckedChange = {
+                        viewModel.updateChecked(it)
                     })
                 }
             }

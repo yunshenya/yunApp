@@ -19,7 +19,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.yunshen.yunapp.viewmodel.UIViewModel
 
 @Composable
-fun ToolsScreen(modifier: Modifier = Modifier, viewModel: UIViewModel =  viewModel()) {
+fun ToolsScreen(modifier: Modifier = Modifier, viewModel: UIViewModel = viewModel()) {
 
     Box(modifier = modifier.fillMaxSize()) {
         Scaffold(
@@ -34,7 +34,11 @@ fun ToolsScreen(modifier: Modifier = Modifier, viewModel: UIViewModel =  viewMod
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(text = "${viewModel.count.intValue}", modifier = Modifier.padding(innerPadding))
+                Text(
+                    text = "${viewModel.count.intValue}",
+                    modifier = Modifier.padding(innerPadding)
+                )
+                Text(text = "${viewModel.isChecked.value}")
             }
         }
     }
