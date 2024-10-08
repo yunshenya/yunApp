@@ -24,26 +24,35 @@ import com.yunshen.yunapp.viewmodel.UIViewModel
 import kotlinx.coroutines.launch
 
 @Composable
-fun SettingScreen(modifier: Modifier = Modifier, viewModel: UIViewModel = viewModel()) {
-    val storeManager = StoreManager(LocalContext.current)
-    val storeData =  storeManager.checked.collectAsState(initial = false)
+fun SettingScreen(
+    modifier: Modifier = Modifier,
+    viewModel: UIViewModel = viewModel(),
+    storeManager: StoreManager = StoreManager(LocalContext.current)
+) {
+    val storeData = storeManager.checked.collectAsState(initial = false)
     val scope = rememberCoroutineScope()
     Box(modifier = modifier.fillMaxSize()) {
-        Scaffold (
+        Scaffold(
             topBar = {
                 NavTopBar {
                     Text(text = "Setting")
                 }
             }
-        ){ innerPadding ->
+        ) { innerPadding ->
             Column(
                 modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Row (modifier = Modifier.fillMaxWidth().padding(innerPadding), horizontalArrangement = Arrangement.SpaceAround, verticalAlignment = Alignment.CenterVertically){
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(innerPadding),
+                    horizontalArrangement = Arrangement.SpaceAround,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
                     Text(text = "设置")
                     Switch(checked = storeData.value, onCheckedChange = {
-                        scope.launch{
+                        scope.launch {
                             storeManager.updateChecked(it)
                         }
                     })

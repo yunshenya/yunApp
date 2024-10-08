@@ -2,6 +2,7 @@ package com.yunshen.yunapp.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -10,6 +11,7 @@ import com.yunshen.yunapp.pages.IndexScreen
 import com.yunshen.yunapp.pages.LoginScreen
 import com.yunshen.yunapp.pages.SettingScreen
 import com.yunshen.yunapp.pages.ToolsScreen
+import com.yunshen.yunapp.viewmodel.StoreManager
 import com.yunshen.yunapp.viewmodel.UIViewModel
 
 @Composable
@@ -18,6 +20,8 @@ fun Navigation(navHostController: NavHostController, modifier: Modifier = Modifi
     //所以应该使用val viewmodel: UIViewModel = viewModel()
     //viewModel不会导致这个重组
     val viewmodel: UIViewModel = viewModel()
+    //数据持久化
+    val storeManager = StoreManager(LocalContext.current)
     NavHost(navController = navHostController, startDestination = Destinations.INDEX.name){
         composable(route = Destinations.INDEX.name){
             IndexScreen(modifier=modifier, viewModel = viewmodel)
@@ -28,11 +32,11 @@ fun Navigation(navHostController: NavHostController, modifier: Modifier = Modifi
         }
 
         composable(route= Destinations.TOOLS.name){
-            ToolsScreen(modifier = modifier, viewModel = viewmodel)
+            ToolsScreen(modifier = modifier, viewModel = viewmodel, storeManager = storeManager)
         }
 
         composable(route = Destinations.SETTING.name){
-            SettingScreen(modifier = modifier, viewModel = viewmodel)
+            SettingScreen(modifier = modifier, viewModel = viewmodel, storeManager = storeManager)
         }
     }
 }

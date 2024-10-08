@@ -12,14 +12,22 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.yunshen.yunapp.viewmodel.StoreManager
 import com.yunshen.yunapp.viewmodel.UIViewModel
 
 @Composable
-fun ToolsScreen(modifier: Modifier = Modifier, viewModel: UIViewModel = viewModel()) {
+fun ToolsScreen(
+    modifier: Modifier = Modifier,
+    viewModel: UIViewModel = viewModel(),
+    storeManager: StoreManager = StoreManager(LocalContext.current)
+) {
+    val checked = storeManager.checked.collectAsState(initial = false)
     Box(modifier = modifier.fillMaxSize()) {
         Scaffold(
             floatingActionButton = {
@@ -37,6 +45,8 @@ fun ToolsScreen(modifier: Modifier = Modifier, viewModel: UIViewModel = viewMode
                     text = "${viewModel.count.intValue}",
                     modifier = Modifier.padding(innerPadding)
                 )
+
+                Text(text = "${checked.value}")
             }
         }
     }
