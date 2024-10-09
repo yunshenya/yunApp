@@ -127,10 +127,17 @@ fun IndexScreen(modifier: Modifier = Modifier, viewModel: UIViewModel = viewMode
                                 targetValue = if (pagerState.currentPage == index) 1f else 0.8f,
                                 label = "缩放动画", animationSpec = tween(300)
                             )
-                            AsyncImage(
+                            SubcomposeAsyncImage(
                                 model = images[index],
-                                error = painterResource(id = R.drawable.hhead),
-                                contentDescription = null,
+                                error = {
+                                    painterResource(id = R.drawable.hhead)
+                                },
+                                loading = {
+                                    Box(modifier = Modifier.fillMaxSize().padding(10.dp), contentAlignment = Alignment.Center){
+                                        CircularProgressIndicator()
+                                    }
+                                },
+                                contentDescription = "加载轮播图",
                                 modifier = Modifier
                                     .padding(5.dp)
                                     .fillMaxWidth()
@@ -200,7 +207,7 @@ fun IntroductoryCard(
             elevation = CardDefaults.cardElevation(defaultElevation = 10.dp) // 设置阴影
         ) {
             SubcomposeAsyncImage(
-                model = state.imageList[it].imgurl,
+                model = state.imageList[it].data.imgurl,
                 error = {
                     painterResource(id = R.drawable.hhead)
                 },

@@ -38,7 +38,7 @@ class UIViewModel: ViewModel() {
             try {
                 val result = Api.imageService.getAnimeList()
                 _uiState.update {
-                    it.copy(image = result.imgurl)
+                    it.copy(image = result.data.imgurl)
                 }
         } catch (e: Exception){
             Log.d("getAnimeList", "getAnimeList: ${e.message}")
@@ -53,7 +53,7 @@ class UIViewModel: ViewModel() {
                     Api.imageService.getAnimeList()
                 }
                 _uiState.update {
-                    it.copy(carousel = newImages.map { it.imgurl })
+                    it.copy(carousel = newImages.map { it.data.imgurl })
                 }
         }catch (e: Exception){
             Log.d("getAnimeList", "getAnimeList: ${e.message}")

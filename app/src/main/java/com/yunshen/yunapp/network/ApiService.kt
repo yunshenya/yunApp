@@ -29,6 +29,6 @@ object Api{
 }
 
 interface ImageService{
-    @GET("api.php?img")
+    @GET("api.php?json")
     suspend fun getAnimeList(): ImageData
 }

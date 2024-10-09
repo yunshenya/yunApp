@@ -36,7 +36,7 @@ fun Navigation(navHostController: NavHostController, modifier: Modifier = Modifi
         }
 
         composable(route = Destinations.SETTING.name){
-            SettingScreen(modifier = modifier, viewModel = viewmodel, storeManager = storeManager)
+            SettingScreen(modifier = modifier, storeManager = storeManager)
         }
     }
 }
