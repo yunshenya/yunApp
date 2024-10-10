@@ -75,18 +75,8 @@ fun IndexScreen(modifier: Modifier = Modifier, viewModel: UIViewModel = viewMode
     val scope = rememberCoroutineScope()
     val refreshState = rememberPullToRefreshState()
     val configuration = LocalConfiguration.current
-
-    Scaffold (topBar = {
-        NavTopBar {
-            Text(
-                text = "梦想之门", color = Color(0xFF6A0DAD),
-                fontWeight = FontWeight.Black, fontSize = 24.sp
-            )
-        }
-    }){
-        innerPadding ->
         PullToRefreshBox(
-            modifier = modifier.fillMaxSize().padding(innerPadding),
+            modifier = modifier.fillMaxSize(),
             isRefreshing = isRefreshing,
             state = refreshState,
             onRefresh = {
@@ -183,7 +173,6 @@ fun IndexScreen(modifier: Modifier = Modifier, viewModel: UIViewModel = viewMode
                     }
                 }
             }
-        }
     }
 
 
