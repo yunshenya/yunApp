@@ -30,7 +30,6 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.RadioButton
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
@@ -61,7 +60,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import coil.compose.SubcomposeAsyncImage
 import com.yunshen.yunapp.R
-import com.yunshen.yunapp.navigation.NavTopBar
 import com.yunshen.yunapp.viewmodel.UIState
 import com.yunshen.yunapp.viewmodel.UIViewModel
 import kotlinx.coroutines.delay
@@ -75,105 +73,105 @@ fun IndexScreen(modifier: Modifier = Modifier, viewModel: UIViewModel = viewMode
     val scope = rememberCoroutineScope()
     val refreshState = rememberPullToRefreshState()
     val configuration = LocalConfiguration.current
-        PullToRefreshBox(
-            modifier = modifier.fillMaxSize(),
-            isRefreshing = isRefreshing,
-            state = refreshState,
-            onRefresh = {
-                scope.launch {
-                    isRefreshing = true
-                    viewModel.refresh()
-                    isRefreshing = false
-                }
-            }) {
-            AsyncImage(
-                model = state.image,
-                error = painterResource(id = R.drawable.hhead),
-                contentDescription = "背景图",
-                modifier = Modifier
-                    .fillMaxSize()
-                    .blur(10.dp)
-                    .alpha(10f),
-                contentScale = ContentScale.Crop
-            )
-            LazyColumn(
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                item {
-                    Column(modifier = Modifier.fillMaxSize()) {
-                        val images = state.carousel
-                        val pagerState = rememberPagerState(pageCount = { images.size })
-                        val coroutineScope = rememberCoroutineScope()
-                        LaunchedEffect(pagerState.settledPage) {
-                            delay(1000)
-                            val nextPage = (pagerState.settledPage + 1) % images.size
-                            pagerState.animateScrollToPage(nextPage)
-                        }
-                        HorizontalPager(
-                            state = pagerState,
-                            contentPadding = PaddingValues(10.dp)
-                        ) { index ->
-                            val imgScale by animateFloatAsState(
-                                targetValue = if (pagerState.currentPage == index) 1f else 0.8f,
-                                label = "缩放动画", animationSpec = tween(300)
-                            )
-                            SubcomposeAsyncImage(
-                                model = images[index],
-                                error = {
-                                    painterResource(id = R.drawable.hhead)
-                                },
-                                loading = {
-                                    Box(modifier = Modifier.fillMaxSize().padding(10.dp), contentAlignment = Alignment.Center){
-                                        CircularProgressIndicator()
-                                    }
-                                },
-                                contentDescription = "加载轮播图",
-                                modifier = Modifier
-                                    .padding(5.dp)
-                                    .fillMaxWidth()
-                                    .clip(
-                                        RoundedCornerShape(10.dp)
-                                    )
-                                    .scale(imgScale),
-                                contentScale = ContentScale.FillWidth
-                            )
-                        }
-                        Row(
+    PullToRefreshBox(
+        modifier = modifier.fillMaxSize(),
+        isRefreshing = isRefreshing,
+        state = refreshState,
+        onRefresh = {
+            scope.launch {
+                isRefreshing = true
+                viewModel.refresh()
+                isRefreshing = false
+            }
+        }) {
+        AsyncImage(
+            model = state.image,
+            error = painterResource(id = R.drawable.hhead),
+            contentDescription = "背景图",
+            modifier = Modifier
+                .fillMaxSize()
+                .blur(10.dp)
+                .alpha(10f),
+            contentScale = ContentScale.Crop
+        )
+        LazyColumn(
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            item {
+                Column(modifier = Modifier.fillMaxSize()) {
+                    val images = state.carousel
+                    val pagerState = rememberPagerState(pageCount = { images.size })
+                    val coroutineScope = rememberCoroutineScope()
+                    LaunchedEffect(pagerState.settledPage) {
+                        delay(1000)
+                        val nextPage = (pagerState.settledPage + 1) % images.size
+                        pagerState.animateScrollToPage(nextPage)
+                    }
+                    HorizontalPager(
+                        state = pagerState,
+                        contentPadding = PaddingValues(10.dp)
+                    ) { index ->
+                        val imgScale by animateFloatAsState(
+                            targetValue = if (pagerState.currentPage == index) 1f else 0.8f,
+                            label = "缩放动画", animationSpec = tween(300)
+                        )
+                        SubcomposeAsyncImage(
+                            model = images[index],
+                            error = {
+                                painterResource(id = R.drawable.hhead)
+                            },
+                            loading = {
+                                Box(modifier = Modifier.fillMaxSize().padding(10.dp), contentAlignment = Alignment.Center){
+                                    CircularProgressIndicator()
+                                }
+                            },
+                            contentDescription = "加载轮播图",
                             modifier = Modifier
+                                .padding(5.dp)
                                 .fillMaxWidth()
-                                .size(20.dp)
-                                .align(Alignment.CenterHorizontally),
-                            horizontalArrangement = Arrangement.Center
-                        ) {
-                            images.indices.forEach { radioIndex ->
-                                RadioButton(
-                                    modifier = Modifier.scale(0.5f),
-                                    selected = radioIndex == pagerState.currentPage,
-                                    onClick = {
-                                        coroutineScope.launch {
-                                            pagerState.animateScrollToPage(radioIndex)
-                                        }
-                                    })
-                            }
-                        }
+                                .clip(
+                                    RoundedCornerShape(10.dp)
+                                )
+                                .scale(imgScale),
+                            contentScale = ContentScale.FillWidth
+                        )
                     }
-                }
-
-                if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT){
-                    items(state.imageList.size){
-                        IntroductoryCard(it, viewModel, state)
-                    }
-                } else {
-                    item{
-                        LazyRow (modifier = Modifier.fillMaxWidth()){
-                            items(state.imageList.size){
-                                IntroductoryCard(it, viewModel, state)
-                            }
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .size(20.dp)
+                            .align(Alignment.CenterHorizontally),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        images.indices.forEach { radioIndex ->
+                            RadioButton(
+                                modifier = Modifier.scale(0.5f),
+                                selected = radioIndex == pagerState.currentPage,
+                                onClick = {
+                                    coroutineScope.launch {
+                                        pagerState.animateScrollToPage(radioIndex)
+                                    }
+                                })
                         }
                     }
                 }
             }
-    }
+
+            if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT){
+                items(state.imageList.size){
+                    IntroductoryCard(it, viewModel, state)
+                }
+            } else {
+                item{
+                    LazyRow (modifier = Modifier.fillMaxWidth()){
+                        items(state.imageList.size){
+                            IntroductoryCard(it, viewModel, state)
+                        }
+                    }
+                }
+            }
+        }
+}
 
 
 }
