@@ -35,53 +35,63 @@ fun SettingScreen(
     storeManager: StoreManager = StoreManager(LocalContext.current)
 ) {
     Box(modifier = modifier.fillMaxSize()) {
-            Column(
-                Modifier
-                    .fillMaxSize()
-                    .padding(10.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Card (modifier= Modifier.fillMaxWidth()){
-                    Row (modifier = Modifier.fillMaxWidth().padding(10.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceAround){
-                        Image(painter = painterResource(id = R.drawable.hhead),
-                            contentScale = ContentScale.Crop,
-                            modifier = Modifier.graphicsLayer {
+        Column(
+            Modifier
+                .fillMaxSize()
+                .padding(10.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Card(modifier = Modifier.fillMaxWidth()) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(10.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceAround
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.hhead),
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .graphicsLayer {
                                 shape = RoundedCornerShape(50)
                                 clip = true
-                            }.size(50.dp),
-                            contentDescription = null)
-                        Column {
-                            Text(text = "用户名: 123456D")
-                            Text(text = "邮箱: james.iredell@examplepetstore.com")
-                        }
+                            }
+                            .size(50.dp),
+                        contentDescription = null
+                    )
+                    Column {
+                        Text(text = "用户名: 123456D")
+                        Text(text = "邮箱: james.iredell@examplepetstore.com")
                     }
                 }
-                SettingsCard(
-                    title = "标题",
-                    storeManager = storeManager,
-                    onSwitchChange = {
-                        storeManager.updateChecked(it)
-                    }
-                )
+            }
+            SettingsCard(
+                title = "标题",
+                storeManager = storeManager,
+                onSwitchChange = {
+                    storeManager.updateChecked(it)
+                }
+            )
 
-                SettingsCard(
-                    title = "主题设置",
-                    storeManager = storeManager,
-                    onSwitchChange = {
-                        storeManager.updateChecked(it)
-                    }
-                )
+            SettingsCard(
+                title = "主题设置",
+                storeManager = storeManager,
+                onSwitchChange = {
+                    storeManager.updateChecked(it)
+                }
+            )
         }
     }
 }
 
 
 @Composable
-fun SettingsCard(title: String,
-                 storeManager: StoreManager,
-                 onSwitchChange:suspend (Boolean) -> Unit = {}) {
+fun SettingsCard(
+    title: String,
+    storeManager: StoreManager,
+    onSwitchChange: suspend (Boolean) -> Unit = {}
+) {
     val storeData = storeManager.checked.collectAsState(initial = false)
     val scope = rememberCoroutineScope()
     Card(

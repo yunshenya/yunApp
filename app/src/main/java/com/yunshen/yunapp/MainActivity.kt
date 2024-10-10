@@ -50,7 +50,8 @@ class MainActivity : ComponentActivity() {
             //获取当前路由
             val currentBackStackState by navHostController.currentBackStackEntryAsState()
             //获取当前路由的route
-            val currentDestination = currentBackStackState?.destination?.route ?: Destinations.INDEX.name
+            val currentDestination =
+                currentBackStackState?.destination?.route ?: Destinations.INDEX.name
             //数据持久化
             val storeManager = StoreManager(LocalContext.current)
             //为什么不能使用val viewmodel =  remember { UIViewModel() },因为如果使用这个会导致屏幕反转就被重组了
@@ -58,15 +59,16 @@ class MainActivity : ComponentActivity() {
             //viewModel不会导致这个重组
             val viewmodel: UIViewModel = viewModel()
             YunAppTheme {
-                Scaffold (
+                Scaffold(
                     topBar = {
-                        when(currentDestination){
+                        when (currentDestination) {
                             Destinations.INDEX.name -> {
                                 NavTopBar {
-                                    Row (
+                                    Row(
                                         modifier = Modifier.fillMaxSize(),
                                         verticalAlignment = Alignment.CenterVertically,
-                                        horizontalArrangement = Arrangement.Center){
+                                        horizontalArrangement = Arrangement.Center
+                                    ) {
                                         Text(
                                             text = "梦想之门", color = Color(0xFF6A0DAD),
                                             fontWeight = FontWeight.Black, fontSize = 24.sp
@@ -77,21 +79,26 @@ class MainActivity : ComponentActivity() {
                         }
                     },
                     bottomBar = {
-                    NavBottomBar(
-                        onclick = navigationActions::navigateTo,
-                        bottomBarItemSelected = currentDestination
-                    )
-                },
-                floatingActionButton = {
-                    when(currentDestination){
-                        Destinations.TOOLS.name -> FloatingActionButton(onClick = { viewmodel.add() }) {
-                            Icon(imageVector = Icons.Default.Add, contentDescription = "Add")
+                        NavBottomBar(
+                            onclick = navigationActions::navigateTo,
+                            bottomBarItemSelected = currentDestination
+                        )
+                    },
+                    floatingActionButton = {
+                        when (currentDestination) {
+                            Destinations.TOOLS.name -> FloatingActionButton(onClick = { viewmodel.add() }) {
+                                Icon(imageVector = Icons.Default.Add, contentDescription = "Add")
+                            }
                         }
                     }
-                }
-                ){ innerPadding ->
+                ) { innerPadding ->
                     Surface(modifier = Modifier.fillMaxSize()) {
-                        Navigation(modifier = Modifier.padding(innerPadding), navHostController = navHostController,storeManager = storeManager, viewmodel = viewmodel)
+                        Navigation(
+                            modifier = Modifier.padding(innerPadding),
+                            navHostController = navHostController,
+                            storeManager = storeManager,
+                            viewmodel = viewmodel
+                        )
                     }
                 }
             }

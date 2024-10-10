@@ -121,7 +121,12 @@ fun IndexScreen(modifier: Modifier = Modifier, viewModel: UIViewModel = viewMode
                                 painterResource(id = R.drawable.hhead)
                             },
                             loading = {
-                                Box(modifier = Modifier.fillMaxSize().padding(10.dp), contentAlignment = Alignment.Center){
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .padding(10.dp),
+                                    contentAlignment = Alignment.Center
+                                ) {
                                     CircularProgressIndicator()
                                 }
                             },
@@ -157,21 +162,21 @@ fun IndexScreen(modifier: Modifier = Modifier, viewModel: UIViewModel = viewMode
                 }
             }
 
-            if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT){
-                items(state.imageList.size){
+            if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+                items(state.imageList.size) {
                     IntroductoryCard(it, viewModel, state)
                 }
             } else {
-                item{
-                    LazyRow (modifier = Modifier.fillMaxWidth()){
-                        items(state.imageList.size){
+                item {
+                    LazyRow(modifier = Modifier.fillMaxWidth()) {
+                        items(state.imageList.size) {
                             IntroductoryCard(it, viewModel, state)
                         }
                     }
                 }
             }
         }
-}
+    }
 
 
 }
@@ -199,7 +204,12 @@ fun IntroductoryCard(
                     painterResource(id = R.drawable.hhead)
                 },
                 loading = {
-                    Box(modifier = Modifier.fillMaxSize().padding(10.dp), contentAlignment = Alignment.Center){
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(10.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
                         CircularProgressIndicator()
                     }
                 },
@@ -230,15 +240,19 @@ fun IntroductoryCard(
                 val context = LocalContext.current
                 Button(
                     onClick = {
-                        when(it){
+                        when (it) {
                             5 -> {
                                 try {
-                                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse("mqqopensdkapi://bizAgent/qm/qr?url=http%3A%2F%2Fqm.qq.com%2Fcgi-bin%2Fqm%2Fqr%3Ffrom%3Dapp%26p%3Dandroid%26jump_from%3Dwebapi%26k%3DOt5eg4CDBUGtwHyGNg-faf2ryPo9Gfpw"))
+                                    val intent = Intent(
+                                        Intent.ACTION_VIEW,
+                                        Uri.parse("mqqopensdkapi://bizAgent/qm/qr?url=http%3A%2F%2Fqm.qq.com%2Fcgi-bin%2Fqm%2Fqr%3Ffrom%3Dapp%26p%3Dandroid%26jump_from%3Dwebapi%26k%3DOt5eg4CDBUGtwHyGNg-faf2ryPo9Gfpw")
+                                    )
                                     context.startActivity(intent)
                                 } catch (_: Exception) {
                                     Toast.makeText(context, "请先安装qq", Toast.LENGTH_SHORT).show()
                                 }
                             }
+
                             else -> {
                                 Toast.makeText(context, "开发中...", Toast.LENGTH_SHORT).show()
                             }
