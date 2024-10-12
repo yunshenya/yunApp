@@ -86,7 +86,7 @@ class MainActivity : ComponentActivity() {
                     },
                     floatingActionButton = {
                         when (currentDestination) {
-                            Destinations.TOOLS.name -> FloatingActionButton(onClick = { viewmodel.add() }) {
+                            Destinations.TOOLS.name -> FloatingActionButton(onClick = { viewmodel.count.intValue++ }) {
                                 Icon(imageVector = Icons.Default.Add, contentDescription = "Add")
                             }
                         }

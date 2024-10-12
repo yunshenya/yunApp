@@ -86,10 +86,6 @@ class UIViewModel : ViewModel() {
         }
     }
 
-    fun add() {
-        counter.intValue++
-    }
-
     suspend fun refresh() {
         getImageListAction()
     }
