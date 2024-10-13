@@ -37,7 +37,7 @@ fun ToolsScreen(
     viewModel: UIViewModel = viewModel(),
     storeManager: StoreManager = StoreManager(LocalContext.current)
 ) {
-    val checked = storeManager.checked.collectAsState(initial = false)
+    val themeKey = storeManager.theme.collectAsState(initial = false)
     Box(modifier = modifier.fillMaxSize(),
         contentAlignment = Alignment.Center) {
         LazyVerticalGrid(
@@ -54,7 +54,7 @@ fun ToolsScreen(
                         viewModel.count.intValue++
                     })) {
                 Box(modifier = Modifier.fillMaxWidth()) {
-                    if (checked.value){
+                    if (themeKey.value){
                         Image(modifier = Modifier.fillMaxSize()
                             .blur(10.dp)
                             .alpha(10f),

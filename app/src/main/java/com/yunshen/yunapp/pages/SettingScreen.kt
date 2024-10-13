@@ -15,6 +15,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -34,6 +35,8 @@ fun SettingScreen(
     modifier: Modifier = Modifier,
     storeManager: StoreManager = StoreManager(LocalContext.current)
 ) {
+    val storeData = storeManager.checked.collectAsState(initial = false)
+    val storeTheme = storeManager.theme.collectAsState(initial = false)
     Box(modifier = modifier.fillMaxSize()) {
         Column(
             Modifier
@@ -68,18 +71,18 @@ fun SettingScreen(
             }
             SettingsCard(
                 title = "标题",
-                storeManager = storeManager,
                 onSwitchChange = {
                     storeManager.updateChecked(it)
-                }
+                },
+                storeData = storeData
             )
 
             SettingsCard(
                 title = "主题设置",
-                storeManager = storeManager,
                 onSwitchChange = {
-                    storeManager.updateChecked(it)
-                }
+                    storeManager.updateTheme(it)
+                },
+                storeData = storeTheme
             )
         }
     }
@@ -89,10 +92,9 @@ fun SettingScreen(
 @Composable
 fun SettingsCard(
     title: String,
-    storeManager: StoreManager,
-    onSwitchChange: suspend (Boolean) -> Unit = {}
+    onSwitchChange: suspend (Boolean) -> Unit = {},
+    storeData: State<Boolean>
 ) {
-    val storeData = storeManager.checked.collectAsState(initial = false)
     val scope = rememberCoroutineScope()
     Card(
         modifier = Modifier.padding(top = 10.dp),
