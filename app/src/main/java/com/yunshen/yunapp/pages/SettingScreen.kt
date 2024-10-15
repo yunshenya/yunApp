@@ -42,6 +42,7 @@ fun SettingScreen(
     val storeData = storeManager.checked.collectAsState(initial = false)
     val storeTheme = storeManager.theme.collectAsState(initial = false)
     val isLogin =  storeManager.isLogin.collectAsState(initial = false)
+    val scope = rememberCoroutineScope()
     Box(modifier = modifier.fillMaxSize()) {
         Column(
             Modifier
@@ -54,6 +55,9 @@ fun SettingScreen(
                 .clickable {
                     if (isLogin.value) {
                         Log.d("SettingScreen", "SettingScreen: 登录成功")
+                        scope.launch{
+                            storeManager.updateIsLogin(true)
+                        }
                     } else {
                         goToLoginPages(Destinations.LOGIN)
                     }
