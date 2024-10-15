@@ -1,6 +1,8 @@
 package com.yunshen.yunapp.pages
 
+import android.util.Log
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,16 +29,19 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.yunshen.yunapp.R
+import com.yunshen.yunapp.navigation.Destinations
 import com.yunshen.yunapp.viewmodel.StoreManager
 import kotlinx.coroutines.launch
 
 @Composable
 fun SettingScreen(
     modifier: Modifier = Modifier,
-    storeManager: StoreManager = StoreManager(LocalContext.current)
+    storeManager: StoreManager = StoreManager(LocalContext.current),
+    goToLoginPages: (Destinations) -> Unit = {}
 ) {
     val storeData = storeManager.checked.collectAsState(initial = false)
     val storeTheme = storeManager.theme.collectAsState(initial = false)
+    val isLogin =  storeManager.isLogin.collectAsState(initial = false)
     Box(modifier = modifier.fillMaxSize()) {
         Column(
             Modifier
@@ -44,7 +49,15 @@ fun SettingScreen(
                 .padding(10.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Card(modifier = Modifier.fillMaxWidth()) {
+            Card(modifier = Modifier
+                .fillMaxWidth()
+                .clickable {
+                    if (isLogin.value) {
+                        Log.d("SettingScreen", "SettingScreen: 登录成功")
+                    } else {
+                        goToLoginPages(Destinations.LOGIN)
+                    }
+                }) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -52,20 +65,24 @@ fun SettingScreen(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceAround
                 ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.hhead),
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .graphicsLayer {
-                                shape = RoundedCornerShape(50)
-                                clip = true
-                            }
-                            .size(50.dp),
-                        contentDescription = null
-                    )
-                    Column {
-                        Text(text = "用户名: 123456D")
-                        Text(text = "邮箱: james.iredell@examplepetstore.com")
+                    if (isLogin.value){
+                        Image(
+                            painter = painterResource(id = R.drawable.hhead),
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .graphicsLayer {
+                                    shape = RoundedCornerShape(50)
+                                    clip = true
+                                }
+                                .size(50.dp),
+                            contentDescription = null
+                        )
+                        Column {
+                            Text(text = "用户名: 123456D")
+                            Text(text = "邮箱: james.iredell@examplepetstore.com")
+                        }
+                    }else{
+                        Text(text = "未登录")
                     }
                 }
             }

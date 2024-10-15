@@ -13,6 +13,7 @@ class StoreManager (private val context: Context){
         private val Context.dataStore by preferencesDataStore("settings")
         private val KEY_CHECKED = booleanPreferencesKey("checked")
         private val themeKey = booleanPreferencesKey("theme")
+        private val  isLoginKey = booleanPreferencesKey("isLogin")
     }
     suspend fun updateChecked(checked: Boolean){
         context.dataStore.edit {
@@ -32,6 +33,16 @@ class StoreManager (private val context: Context){
 
     val theme:Flow<Boolean> = context.dataStore.data.map { preferences ->
         preferences[themeKey] == true
+    }
+
+    suspend fun updateIsLogin(isLogin: Boolean){
+        context.dataStore.edit {
+            it[isLoginKey] = isLogin
+        }
+    }
+
+    val isLogin:Flow<Boolean> = context.dataStore.data.map { preferences ->
+        preferences[isLoginKey] == true
     }
 
 }

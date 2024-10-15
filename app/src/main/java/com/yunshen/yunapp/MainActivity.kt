@@ -121,7 +121,8 @@ fun Online() {
                     modifier = Modifier.padding(innerPadding),
                     navHostController = navHostController,
                     storeManager = storeManager,
-                    viewmodel = viewmodel
+                    viewmodel = viewmodel,
+                    navigationActions = navigationActions
                 )
             }
         }

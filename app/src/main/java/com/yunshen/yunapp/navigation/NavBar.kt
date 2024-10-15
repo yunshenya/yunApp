@@ -31,16 +31,16 @@ fun NavTopBar(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
 @Composable
 fun NavBottomBar(
     bottomBarItemSelected: String,
-    onclick: (Destination) -> Unit
+    onclick: (Destinations) -> Unit
 ) {
     NavigationBar {
         BOTTOM_NAVIGATION_ITEMS.forEach {
             NavigationBarItem(
                 icon = { Icon(imageVector = it.icon, contentDescription = null) },
-                selected = bottomBarItemSelected == it.id,
+                selected = bottomBarItemSelected == it.id.name,
                 label = { Text(text = it.text) },
                 onClick = {
-                    onclick(it)
+                    onclick(it.id)
                 }
             )
         }

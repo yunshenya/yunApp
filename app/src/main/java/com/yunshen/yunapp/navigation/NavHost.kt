@@ -19,7 +19,8 @@ fun Navigation(
     navHostController: NavHostController,
     modifier: Modifier = Modifier,
     viewmodel: UIViewModel,
-    storeManager: StoreManager
+    storeManager: StoreManager,
+    navigationActions: AppNavigationActions
 ) {
     NavHost(navController = navHostController,
         startDestination = Destinations.INDEX.name,
@@ -45,7 +46,7 @@ fun Navigation(
         }
 
         composable(route = Destinations.SETTING.name) {
-            SettingScreen(modifier = modifier, storeManager = storeManager)
+            SettingScreen(modifier = modifier, storeManager = storeManager, goToLoginPages = navigationActions::navigateTo)
         }
     }
 }
