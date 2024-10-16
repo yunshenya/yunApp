@@ -46,7 +46,9 @@ fun Navigation(
         }
 
         composable(route = Destinations.SETTING.name) {
-            SettingScreen(modifier = modifier, storeManager = storeManager, goToLoginPages = navigationActions::navigateTo)
+            SettingScreen(modifier = modifier, storeManager = storeManager, goToLoginPages = {
+                navigationActions.navigateTo(Destinations.LOGIN)
+            })
         }
     }
 }

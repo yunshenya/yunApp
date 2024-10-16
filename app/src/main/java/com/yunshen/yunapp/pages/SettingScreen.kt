@@ -29,7 +29,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.yunshen.yunapp.R
-import com.yunshen.yunapp.navigation.Destinations
 import com.yunshen.yunapp.viewmodel.StoreManager
 import kotlinx.coroutines.launch
 
@@ -37,7 +36,7 @@ import kotlinx.coroutines.launch
 fun SettingScreen(
     modifier: Modifier = Modifier,
     storeManager: StoreManager = StoreManager(LocalContext.current),
-    goToLoginPages: (Destinations) -> Unit = {}
+    goToLoginPages: () -> Unit = {}
 ) {
     val storeData = storeManager.checked.collectAsState(initial = false)
     val storeTheme = storeManager.theme.collectAsState(initial = false)
@@ -59,7 +58,7 @@ fun SettingScreen(
                             storeManager.updateIsLogin(true)
                         }
                     } else {
-                        goToLoginPages(Destinations.LOGIN)
+                        goToLoginPages()
                     }
                 }) {
                 Row(
