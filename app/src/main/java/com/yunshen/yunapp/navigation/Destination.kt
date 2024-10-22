@@ -6,12 +6,13 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.Build
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavHostController
+import com.yunshen.yunapp.R
 
 data class Destination(
     val icon: ImageVector,
     val id: Destinations,
     val selectedIcon: ImageVector,
-    val text: String
+    val text: Int
 )
 
 
@@ -28,20 +29,20 @@ val BOTTOM_NAVIGATION_ITEMS: List<Destination> = listOf(
         icon = Icons.Filled.Home,
         id = Destinations.INDEX,
         selectedIcon = Icons.Filled.Home,
-        text = "首页"),
+        text = R.string.index_pages),
 
     Destination(
         icon = Icons.Outlined.Build,
         id = Destinations.TOOLS,
         selectedIcon = Icons.Filled.Home,
-        text = "工具"
+        text = R.string.tools_pages
     ),
 
     Destination(
         icon = Icons.Filled.Settings,
         id = Destinations.SETTING,
         selectedIcon = Icons.Filled.Home,
-        text = "设置")
+        text = R.string.setting_pages)
 )
 
 

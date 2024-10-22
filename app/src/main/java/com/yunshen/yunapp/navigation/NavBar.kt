@@ -11,6 +11,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -38,7 +39,7 @@ fun NavBottomBar(
             NavigationBarItem(
                 icon = { Icon(imageVector = it.icon, contentDescription = null) },
                 selected = bottomBarItemSelected == it.id.name,
-                label = { Text(text = it.text) },
+                label = { Text(text = stringResource(it.text)) },
                 onClick = {
                     onclick(it.id)
                 }
